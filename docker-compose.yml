@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  lambda:
+    build: .
+    volumes:
+      - .:/var/task
+    command: python lambda_function.py
