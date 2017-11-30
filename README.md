@@ -18,7 +18,7 @@ Before working local or uploading to AWS Lambda binaries must be retrieved and d
 
 * `make fetch-dependencies`
 * [Installing Docker](https://docs.docker.com/engine/installation/#get-started)
-
+* [Installing Docker compose](https://docs.docker.com/compose/install/#install-compose)
 
 ## Working locally
 
