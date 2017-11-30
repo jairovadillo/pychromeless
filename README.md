@@ -50,3 +50,5 @@ _(Terraform file to create the AWS Lambda is provided) # noqa_
 
 ## Contributors
 * Jairo Vadillo ([@jairovadillo](https://github.com/jairovadillo))
+* Pere Giro ()
+* Ricard Falcó ()
