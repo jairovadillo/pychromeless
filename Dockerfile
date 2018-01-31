@@ -1,8 +1,15 @@
-FROM lambci/lambda:build-python3.6
+FROM lambci/lambda:python3.6
 MAINTAINER tech@21buttons.com
 
-ENV PATH=/var/lang/bin:/usr/local/bin:/usr/bin/:/bin:/var/task/bin:$PATH
+USER root
 
-COPY requirements.txt /var/task
+ENV APP_DIR /var/task
 
-RUN pip install -r /var/task/requirements.txt
+WORKDIR $APP_DIR
+
+COPY requirements.txt .
+COPY bin ./bin
+COPY lib ./lib
+
+RUN mkdir -p $APP_DIR/lib
+RUN pip3 install -r requirements.txt -t /var/task/lib

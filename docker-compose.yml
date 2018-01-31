@@ -1,8 +1,10 @@
 version: '3'
 
 services:
-  lambda:
+  lambda-run:
     build: .
+    environment:
+      - PYTHONPATH=/var/task/src:/var/task/lib
+      - PATH=/var/task/bin
     volumes:
-      - .:/var/task
-    command: python lambda_function.py
+      - ./src/:/var/task/src/

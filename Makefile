@@ -1,5 +1,6 @@
 clean:
-	rm -rf build build.zip __pycache__
+	rm -rf build build.zip
+	rm -rf __pycache__
 
 fetch-dependencies:
 	mkdir -p bin/
@@ -15,10 +16,18 @@ fetch-dependencies:
 	# Clean
 	rm headless-chromium.zip chromedriver.zip
 
-lambda-build: clean fetch-dependencies
+docker-build:
+	docker-compose build
+
+docker-run:
+	docker-compose run lambda src.lambda_function.lambda_handler
+
+build-lambda-package: clean fetch-dependencies
 	mkdir build
-	cp lambda_function.py build/.
+	cp -r src build/.
 	cp -r bin build/.
 	cp -r lib build/.
-	pip install -r requirements.txt -t build/.
-	cd build/
+	pip install -r requirements.txt -t build/lib/.
+	cd build; zip -9qr build.zip .
+	cp build/build.zip .
+	rm -rf build
