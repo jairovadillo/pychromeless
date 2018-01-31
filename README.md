@@ -14,33 +14,31 @@ PyChromeless allows to automate actions to any webpage from AWS Lambda. The aim 
 
 ## Requirements
 
-Before working local or uploading to AWS Lambda binaries must be retrieved and docker should be installed:
+Install docker and dependencies:
 
 * `make fetch-dependencies`
 * [Installing Docker](https://docs.docker.com/engine/installation/#get-started)
-
+* [Installing Docker compose](https://docs.docker.com/compose/install/#install-compose)
 
 ## Working locally
 
-In order to make local development easy a docker-compose is provided and also a very simple example that searches 
- for "21 buttons" on Google and prints the first result (`lambda_function.py`). In order to run the example simply execute:
+To make local development easy, you can use the included docker-compose. 
+Have a look at the example in `lambda_function.py`: it looks up “21 buttons” on Google and prints the first result. 
 
-`docker-compose up`
-
-Also, if you want to run a (python) shell and try stuff by yourself use:
-
-`docker-compose run --rm lambda python` or `docker-compose run --rm lambda bash`
+Run it with: `make run-lambda`
 
 ## Building and uploading the distributable package
 
 Everything is summarized into a simple Makefile so use:
 
-* `make lambda-build`
-* Compress the resulting build/ directory contents into a .zip file
-* Upload this file to your AWS Lambda
-* Set `PATH=/var/lang/bin:/usr/local/bin:/usr/bin/:/bin:/var/task/bin` environment var on your AWS Lambda
-
-_(Terraform file to create the AWS Lambda is provided) # noqa_
+* `make build-lambda-package`
+* Upload the `build.zip` resulting file to your AWS Lambda function
+* Set Lambda environment variables (same values as in docker-compose.yml)
+    * `PYTHONPATH=/var/task/src:/var/task/lib`
+    * `PATH=/var/task/bin`
+* Adjust lambda function parameters to match your necessities, for the given example:
+    * Timeout: +10 seconds
+    * Memory: + 250MB 
 
 ## Shouts to
 * [Docker lambda](https://github.com/lambci/docker-lambda)
@@ -50,3 +48,5 @@ _(Terraform file to create the AWS Lambda is provided) # noqa_
 
 ## Contributors
 * Jairo Vadillo ([@jairovadillo](https://github.com/jairovadillo))
+* Pere Giro ()
+* Ricard Falcó ()
