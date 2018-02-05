@@ -7,6 +7,7 @@ PyChromeless allows to automate actions to any webpage from AWS Lambda. The aim 
 
 ## But... how?
 
+All the process is explained [here](https://engineering.21buttons.com/crawling-thousands-of-products-using-aws-lambda-80332e259de1). Technologies used are:
 * Python 3.6
 * Selenium
 * [Chrome driver](https://sites.google.com/a/chromium.org/chromedriver/)
