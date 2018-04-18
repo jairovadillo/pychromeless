@@ -26,7 +26,7 @@ Install docker and dependencies:
 To make local development easy, you can use the included docker-compose. 
 Have a look at the example in `lambda_function.py`: it looks up “21 buttons” on Google and prints the first result. 
 
-Run it with: `make run-lambda`
+Run it with: `make docker-run`
 
 ## Building and uploading the distributable package
 
@@ -50,4 +50,4 @@ Everything is summarized into a simple Makefile so use:
 ## Contributors
 * Jairo Vadillo ([@jairovadillo](https://github.com/jairovadillo))
 * Pere Giro ()
-* Ricard Falcó ()
+* Ricard Falcó ([@ricardfp](https://github.com/ricardfp))
