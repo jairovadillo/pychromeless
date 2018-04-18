@@ -16,7 +16,7 @@ def lambda_handler(*args, **kwargs):
     driver.click('//input[@name="btnK"]')
     time.sleep(0.5)
 
-    first_google_result_title = driver.get_inner_html('(//div[@class="_NId"]//a)[1]')
+    first_google_result_title = driver.get_inner_html('(//div[@class="rc"]//a)[1]')
 
     print("--------------------------")
     print(first_google_result_title)
