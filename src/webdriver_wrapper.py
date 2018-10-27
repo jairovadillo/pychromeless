@@ -6,9 +6,10 @@ from selenium import webdriver
 
 
 class WebDriverWrapper:
-    def __init__(self):
+    def __init__(self, download_location=None):
         chrome_options = webdriver.ChromeOptions()
         self._tmp_folder = '/tmp/{}'.format(uuid.uuid4())
+        self.download_location = download_location
 
         if not os.path.exists(self._tmp_folder):
             os.makedirs(self._tmp_folder)
@@ -21,6 +22,16 @@ class WebDriverWrapper:
 
         if not os.path.exists(self._tmp_folder + '/cache-dir'):
             os.makedirs(self._tmp_folder + '/cache-dir')
+
+        if self.download_location:
+            prefs = {'download.default_directory': download_location,
+                     'download.prompt_for_download': False,
+                     'download.directory_upgrade': True,
+                     'safebrowsing.enabled': False,
+                     'safebrowsing.disable_download_protection': True,
+                     'profile.default_content_setting_values.automatic_downloads': 1}
+
+            chrome_options.add_experimental_option('prefs', prefs)
 
         chrome_options.add_argument('--headless')
         chrome_options.add_argument('--no-sandbox')
@@ -42,6 +53,9 @@ class WebDriverWrapper:
         chrome_options.binary_location = os.getcwd() + "/bin/headless-chromium"
 
         self._driver = webdriver.Chrome(chrome_options=chrome_options)
+
+        if self.download_location:
+            self.enable_download_in_headless_chrome()
 
     def get_url(self, url):
         self._driver.get(url)
@@ -74,3 +88,28 @@ class WebDriverWrapper:
                     os.unlink(file_path)
             except Exception as e:
                 print(e)
+
+    def enable_download_in_headless_chrome(self):
+        """
+        This function was pulled from
+        https://github.com/shawnbutton/PythonHeadlessChrome/blob/master/driver_builder.py#L44
+
+        There is currently a "feature" in chrome where
+        headless does not allow file download: https://bugs.chromium.org/p/chromium/issues/detail?id=696481
+
+        Specifically this comment ( https://bugs.chromium.org/p/chromium/issues/detail?id=696481#c157 )
+        saved the day by highlighting that download wasn't working because it was opening up in another tab.
+
+        This method is a hacky work-around until the official chromedriver support for this.
+        Requires chrome version 62.0.3196.0 or above.
+        """
+        self._driver.execute_script(
+            "var x = document.getElementsByTagName('a'); var i; for (i = 0; i < x.length; i++) { x[i].target = '_self'; }")
+        # add missing support for chrome "send_command"  to selenium webdriver
+        self._driver.command_executor._commands["send_command"] = ("POST", '/session/$sessionId/chromium/send_command')
+
+        params = {'cmd': 'Page.setDownloadBehavior', 'params': {'behavior': 'allow', 'downloadPath': self.download_location}}
+        command_result = self._driver.execute("send_command", params)
+        print("response from browser:")
+        for key in command_result:
+            print("result:" + key + ":" + str(command_result[key]))
