@@ -43,6 +43,19 @@ This will cause file downloads to automatically download into the `download_loca
 requiring a confirmation dialog. You might need to sleep the handler until the file is downloaded
 since this occurs asynchronously.
 
+In order to download a file from a link that opens in a new tab (i.e. `target='_blank'`) you will need to 
+call `enable_download_in_headless_chrome` in your scraping script after navigating to the desired page, but before
+clicking to download. This will replace all `target='_blank'` with `target='_self'`. For example:
+
+```python
+# Navigate to download page
+driver._driver.find_element_by_xpath('//a[@href="/downloads/"]').click()
+# Enable headless chrome file download
+driver.enable_download_in_headless_chrome()
+# Click the download link
+driver._driver.find_element_by_class_name("btn").click()
+```
+
 ## Building and uploading the distributable package
 
 Everything is summarized into a simple Makefile so use:
