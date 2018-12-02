@@ -1,6 +1,7 @@
 import time
 
 from webdriver_wrapper import WebDriverWrapper
+from selenium.webdriver.common.keys import Keys
 
 
 def lambda_handler(*args, **kwargs):
@@ -8,13 +9,11 @@ def lambda_handler(*args, **kwargs):
 
     driver.get_url('https://www.google.es/')
 
-    driver.set_input_value('//input[@id="lst-ib"]', '21 buttons')
+    driver.set_input_value('//input[@name="q"]', '21 buttons')
 
-    driver.click('//center//img[@alt="Google"]')
-    time.sleep(0.5)
-
+    button = driver.find("//input[@name='btnK']")
+    button.send_keys(Keys.TAB)
     driver.click('//input[@name="btnK"]')
-    time.sleep(0.5)
 
     first_google_result_title = driver.get_inner_html('(//div[@class="rc"]//a)[1]')
 
