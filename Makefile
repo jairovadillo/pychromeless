@@ -1,3 +1,5 @@
+.PHONY clean fetch-dependencies docker-build docker-run build-lambda-package
+
 clean:
 	rm -rf build build.zip
 	rm -rf __pycache__
