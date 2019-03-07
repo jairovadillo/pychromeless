@@ -1,3 +1,5 @@
 setuptools
 selenium==3.8.0
-boto
+boto3==1.7.74
+botocore==1.10.74
+futures==2.2.0

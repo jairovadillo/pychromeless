@@ -24,16 +24,16 @@ fetch-dependencies:
 	# Clean
 	rm headless-chromium.zip chromedriver.zip
 
-docker-build:
+build:
 	docker-compose build
 
-docker-run: docker-build
-	docker-compose run lambda src.lambda_function.lambda_handler
-
-test: docker-build
+run:
 	docker-compose run lambda src.lambda_function.lambda_handler '{"url": "$(URL)"}'
 
-build-lambda: clean fetch-dependencies
+test: build
+	docker-compose run lambda src.lambda_function.lambda_handler '{"url": "$(URL)"}'
+
+pack: clean fetch-dependencies
 	mkdir build
 	cp -r src build/.
 	cp -r bin build/.
