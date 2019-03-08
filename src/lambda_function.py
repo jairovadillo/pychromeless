@@ -37,7 +37,7 @@ def lambda_handler(event, context):
         return {'screenshot': 'https://glimpsefiles.s3.amazonaws.com/screenshots/' + screenshot_filename }
     except botocore.exceptions.ClientError as e:
         print(e)
-        if e.response['Error']['Code'] == "404":
+        if e.response['Error']['Code'] == "404" or e.response['Error']['Code'] == "403":
             print("### The object does not exist. Screenshotting... ###")
         else:
             raise
