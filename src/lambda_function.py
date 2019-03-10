@@ -1,56 +1,38 @@
-import os
 import hashlib
 import urllib
-import boto3
-import botocore
-from webdriver_wrapper import WebDriverWrapper
+import glimpse_driver as gd
+from s3_help import S3
 
 def md5_str(string):
     m = hashlib.md5()
     m.update(string.encode('utf-8'))
     return str(m.hexdigest())
 
-def lambda_handler(event, context):
-
-    GLIMPSE_BUCKET_NAME = os.getenv('GLIMPSE_BUCKET_NAME')
-
-    # Fail if URL not defined
-    scannee = urllib.parse.unquote(event['url'])
-
-    # Filter for potentially malicious or invalid URLs
+def filter(url):
     bad_words = ['file://']
-    if any(word in scannee for word in bad_words):
+    if any(word in url for word in bad_words):
         raise Exception('suspicious string found in URL')
 
+def lambda_handler(event, context):
+
+    # Fail if URL not defined
+    url = urllib.parse.unquote(event['url'])
+
+    # Filter for potentially malicious or invalid URLs
+    filter(url)
+
     # Calculate MD5 hash of URL 
-    screenshot_filename = md5_str(scannee) + '.png'
-    screenshot_path = '/tmp/' + screenshot_filename
-    screenshot_key_path = 'screenshots/' + screenshot_filename
+    screenshot_filename = md5_str(url) + '.png'
+    local_path = '/tmp/' + screenshot_filename
+    remote_path = 'screenshots/' + screenshot_filename
 
-    s3_resource = boto3.resource('s3')
-    screenshot_key = s3_resource.Object(bucket_name=GLIMPSE_BUCKET_NAME, key=screenshot_key_path)
-    
-    # Check if a screenshot already exists
-    try:
-        s3_resource.Object(GLIMPSE_BUCKET_NAME, 'screenshots/' + screenshot_filename).download_file(screenshot_path)
-        print(' ### Screenshot already exists for this URL. ###')
-        return {'screenshot': 'https://glimpsefiles.s3.amazonaws.com/screenshots/' + screenshot_filename }
-    except botocore.exceptions.ClientError as e:
-        print(e)
-        if e.response['Error']['Code'] == "404" or e.response['Error']['Code'] == "403":
-            print("### The object does not exist. Screenshotting... ###")
-        else:
-            raise
+    s3 = S3('glimpsefiles')
+    s3_key = s3.get_key(remote_path)
 
-    print('### Fetching: {} ###'.format(scannee))
-    driver = WebDriverWrapper()
-    driver.get_url(scannee)
+    glimpse = gd.GlimpseDriver()
+    glimpse.driver.get(url)
 
-    print('### Saving screenshot to: {} ###'.format(screenshot_key_path))
-    driver.screenshot(screenshot_path)
+    glimpse.screenshot(local_path)
+    s3.upload_file(s3_key, local_path)
 
-    driver.close()
-
-    # Upload screenshot to S3
-    screenshot_key.upload_file(screenshot_path)
     return {'screenshot': 'https://glimpsefiles.s3.amazonaws.com/screenshots/' + screenshot_filename }
