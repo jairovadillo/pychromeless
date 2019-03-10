@@ -12,3 +12,5 @@ env/
 
 ### Project specifics
 bin/
+*.zip
+*.tar.gz
