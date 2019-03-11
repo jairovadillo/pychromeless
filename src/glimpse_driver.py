@@ -74,5 +74,6 @@ class GlimpseDriver:
     def get_location(self):
         return self.driver.execute_script('return window.location')
 
-    def effective_url(self):
-        return self.driver.execute_script('return window.location')['href']
+    def get_network_history(self):
+        net_list = self.driver.execute_script('return window.performance.getEntries()')
+        return [site['name'] for site in net_list ]

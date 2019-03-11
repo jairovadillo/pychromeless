@@ -15,7 +15,7 @@ def filter(url):
 
 def lambda_handler(event, context):
 
-    # Fail if URL not defined
+    # Decode the url argument
     url = urllib.parse.unquote(event['url'])
 
     # Filter for potentially malicious or invalid URLs
@@ -29,10 +29,24 @@ def lambda_handler(event, context):
     s3 = S3('glimpsefiles')
     s3_key = s3.get_key(remote_path)
 
+    # Don't update if update==false or doesn't exist
+    # TODO: If update != true or false. Invalid request.
+    if 'update' in event.keys():
+        if event['update'] != 'true':
+            exists = s3.check_exists('screenshots/', screenshot_filename)
+            if exists: # Screenshot exists for this hashed URL. Return the link.
+                return exists
+    else:
+        exists = s3.check_exists('screenshots/', screenshot_filename)
+        if exists: # Screenshot exists for this hashed URL. Return the link.
+            return exists
+
+
     glimpse = gd.GlimpseDriver()
     glimpse.driver.get(url)
 
     glimpse.screenshot(local_path)
+
     s3.upload_file(s3_key, local_path)
 
     return {'screenshot': 'https://glimpsefiles.s3.amazonaws.com/screenshots/' + screenshot_filename }
