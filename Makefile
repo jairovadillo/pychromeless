@@ -15,27 +15,29 @@ fetch-dependencies:
 	# Get chromedriver
 	curl -SL --silent https://chromedriver.storage.googleapis.com/2.32/chromedriver_linux64.zip > chromedriver.zip
 	unzip -n chromedriver.zip -d bin/
+	rm chromedriver.zip
 
 	# Get Headless-chrome
 	curl -SL --silent https://github.com/adieuadieu/serverless-chrome/releases/download/v1.0.0-29/stable-headless-chromium-amazonlinux-2017-03.zip > headless-chromium.zip
 	unzip -n headless-chromium.zip -d bin/
+	rm headless-chromium.zip
 
 	# Get geckodriver
-	curl -SL --silent https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz > geckodriver.tar.gz
-	tar -xzvf geckodriver.tar.gz -C bin/
+	#curl -SL --silent https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz > geckodriver.tar.gz
+	#tar -xzvf geckodriver.tar.gz -C bin/
 
 	# Get firefox
-	curl -SL --silent https://download-installer.cdn.mozilla.net/pub/firefox/releases/65.0.2/linux-x86_64/en-US/firefox-65.0.2.tar.bz2 > firefox.tar.bz2
-	tar -xjvf firefox.tar.bz2 -C bin/ 
-
-	# Clean
-	rm headless-chromium.zip chromedriver.zip geckodriver.tar.gz
+	#curl -SL --silent https://download-installer.cdn.mozilla.net/pub/firefox/releases/65.0.2/linux-x86_64/en-US/firefox-65.0.2.tar.bz2 > firefox.tar.bz2
+	#tar -xjvf firefox.tar.bz2 -C bin/ 
 
 build:
 	docker-compose build
 
 run:
 	docker-compose run --rm lambda src.lambda_function.lambda_handler '{"url": "${URL}"}'
+
+update:
+	docker-compose run --rm lambda src.lambda_function.lambda_handler '{"url": "${URL}", "update": "true"}'
 
 test: build
 	docker-compose run --rm lambda src.lambda_function.lambda_handler '{"url": "${URL}"}'

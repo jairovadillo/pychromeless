@@ -2,6 +2,7 @@ import hashlib
 import urllib
 import glimpse_driver as gd
 from s3_help import S3
+from selenium.common.exceptions import WebDriverException
 
 def md5_str(string):
     m = hashlib.md5()
@@ -15,8 +16,10 @@ def filter(url):
 
 def lambda_handler(event, context):
 
-    # Decode the url argument
+    # Decode the url argument and fix if no protocol
     url = urllib.parse.unquote(event['url'])
+    if 'http' not in url:
+        url = 'http://' + url
 
     # Filter for potentially malicious or invalid URLs
     filter(url)
@@ -43,10 +46,11 @@ def lambda_handler(event, context):
 
 
     glimpse = gd.GlimpseDriver()
-    glimpse.driver.get(url)
+    try:
+        glimpse.driver.get(url)
+        glimpse.screenshot(local_path)
+        s3.upload_file(s3_key, local_path)
+        return {'screenshot': 'https://glimpsefiles.s3.amazonaws.com/screenshots/' + screenshot_filename, 'effective_url': glimpse.driver.current_url}
 
-    glimpse.screenshot(local_path)
-
-    s3.upload_file(s3_key, local_path)
-
-    return {'screenshot': 'https://glimpsefiles.s3.amazonaws.com/screenshots/' + screenshot_filename }
+    except WebDriverException as e:
+        return {'error_message': e.msg}
