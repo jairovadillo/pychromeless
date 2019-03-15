@@ -22,13 +22,17 @@ fetch-dependencies:
 	unzip -n headless-chromium.zip -d bin/
 	rm headless-chromium.zip
 
+	# When Firefox is supported
+
 	# Get geckodriver
 	#curl -SL --silent https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz > geckodriver.tar.gz
 	#tar -xzvf geckodriver.tar.gz -C bin/
+	#rm geckodriver.tar.gz
 
 	# Get firefox
 	#curl -SL --silent https://download-installer.cdn.mozilla.net/pub/firefox/releases/65.0.2/linux-x86_64/en-US/firefox-65.0.2.tar.bz2 > firefox.tar.bz2
 	#tar -xjvf firefox.tar.bz2 -C bin/ 
+	#rm firefox.tar.bz2
 
 build:
 	docker-compose build

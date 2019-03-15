@@ -1,27 +1,39 @@
 import os
 import uuid
 from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
-class Options:
+class BrowserSettings:
     def __init__(self):
         #self.resolution = "1280x1696"
         self.resolution = "1920x1080"
 
-class Firefox(Options):
+class Firefox(BrowserSettings):
     def __init__(self):
-        Options.__init__(self)
-        self.options = webdriver.FirefoxOptions()
-        self.options.headless = True
+        BrowserSettings.__init__(self)
+
+        os.system("/var/task/bin/firefox/firefox --headless")
+
+        binary = FirefoxBinary("/var/task/bin/firefox/firefox")
+        self.options = Options()
+
+        self.options.set_headless(headless=True)
+        
         self.options.accept_insecure_certs = True
-        self.options.add_argument("--width={}".format(self.resolution[:self.resolution.index("x")]))
-        self.options.add_argument("--height={}".format(self.resolution[:self.resolution.index("x") + 1]))
+        self.width = self.resolution[:self.resolution.index("x")]
+        self.height = self.resolution[:self.resolution.index("x") + 1]
+        
+        self.driver = webdriver.Firefox(firefox_binary=binary, firefox_options=self.options)
+        self.driver.set_window_position(0, 0)
+        self.driver.set_window_size(self.width, self.height)
 
-        self.driver = webdriver.Firefox(firefox_options=self.options)
 
 
-class Chromium(Options):
+class Chromium(BrowserSettings):
     def __init__(self):
-        Options.__init__(self)
+        BrowserSettings.__init__(self)
 
         self._tmp_folder = '/tmp/{}'.format(uuid.uuid4())
 
