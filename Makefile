@@ -3,7 +3,7 @@
 AWS_USER = "glimpse"
 S3_BUCKET = "glimpsefiles"
 S3_KEY = "functions/screenshot/build.zip"
-FUNCTION_NAME = "glimpseScreenshot"
+FUNCTION_NAME = "GlimpseScan"
 
 clean:
 	rm -rf build build.zip

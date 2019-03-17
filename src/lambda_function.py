@@ -33,7 +33,7 @@ def lambda_handler(event, context):
 
     # Create initial item for database entry
     # TODO: Check if item already in database
-    db = DynamoDB('glimpsetest')
+    db = DynamoDB('glimpsedata')
     db_data = {'urlhash': url_hash, 'url': url, 'timescanned': '0000-00-00 00:00:00', 'numscans': 1}
 
     s3 = S3('glimpsefiles')
