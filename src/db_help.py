@@ -10,4 +10,7 @@ class DynamoDB:
         return self.table.put_item(Item=obj)
 
     def get(self, key):
-        return self.table.get_item(Key=key)["Item"]
+        try:
+            return self.table.get_item(Key=key)["Item"]
+        except:
+            return None

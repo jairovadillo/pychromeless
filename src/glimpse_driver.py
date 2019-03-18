@@ -7,8 +7,8 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 class BrowserSettings:
     def __init__(self):
-        #self.resolution = "1280x1696"
-        self.resolution = "1920x1080"
+        self.resolution = "1280x1696"
+        #self.resolution = "1920x1080"
 
 class Firefox(BrowserSettings):
     def __init__(self):

@@ -1,5 +1,6 @@
 import hashlib
 import urllib
+from datetime import datetime
 import glimpse_driver as gd
 from s3_help import S3
 from db_help import DynamoDB
@@ -19,37 +20,44 @@ def lambda_handler(event, context):
 
     # Decode the url argument and fix if no protocol
     url = urllib.parse.unquote(event['url'])
-    if 'http' not in url:
-        url = 'http://' + url
-
     # Filter for potentially malicious or invalid URLs
     filter(url)
 
+    if 'http' not in url:
+        url = 'http://' + url
+
+    now = datetime.now()
+    timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
+
     # Calculate MD5 hash of URL
-    url_hash = md5_str(url) 
+    url_hash = md5_str(url)
+    return_data = {'urlhash': url_hash} 
     screenshot_filename = url_hash + '.png'
     local_path = '/tmp/' + screenshot_filename
     remote_path = 'screenshots/' + screenshot_filename
 
-    # Create initial item for database entry
-    # TODO: Check if item already in database
     db = DynamoDB('glimpsedata')
-    db_data = {'urlhash': url_hash, 'url': url, 'timescanned': '0000-00-00 00:00:00', 'numscans': 1}
+
+    exists = False
+    db_data = db.get({'urlhash': url_hash})
+    
+    if db_data is None:
+        db_data = {'urlhash': url_hash, 'url': url, 'timescanned': timestamp, 'numscans': 1}
+    else:
+        exists = True
+        db_data['timescanned'] = timestamp
 
     s3 = S3('glimpsefiles')
     s3_key = s3.get_key(remote_path)
 
     # Don't update if update==false or doesn't exist
-    # TODO: If update != true or false. Invalid request.
     if 'update' in event.keys():
         if str(event['update']).lower() != 'true':
-            exists = s3.check_exists('screenshots/', screenshot_filename)
-            if exists: # Screenshot exists for this hashed URL. Return the link.
-                return exists
+            if exists:
+                return return_data
     else:
-        exists = s3.check_exists('screenshots/', screenshot_filename)
-        if exists: # Screenshot exists for this hashed URL. Return the link.
-            return exists
+        if exists:
+            return return_data
 
 
     glimpse = gd.GlimpseDriver()
@@ -60,11 +68,13 @@ def lambda_handler(event, context):
 
         db_data['effectiveurl'] = glimpse.driver.current_url
         db_data['title'] = glimpse.driver.title
+        if exists:
+            db_data['numscans'] += 1
+        else:
+            db_data['numscans'] = 1
         db.put(db_data)
 
-        db_data['screenshot'] = 'https://glimpsefiles.s3.amazonaws.com/screenshots/' + screenshot_filename
-        return db_data
-        # return {'screenshot': 'https://glimpsefiles.s3.amazonaws.com/screenshots/' + screenshot_filename}
+        return return_data
 
     except WebDriverException as e:
         return {'error_message': e.msg}
