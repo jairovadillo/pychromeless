@@ -14,3 +14,7 @@ env/
 bin/
 *.zip
 *.tar.gz
+
+### Sensitive info
+docker-compose.yml
+

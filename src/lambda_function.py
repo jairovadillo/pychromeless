@@ -1,5 +1,6 @@
 import hashlib
 import urllib
+import requests
 from datetime import datetime
 import glimpse_driver as gd
 from s3_help import S3
@@ -16,6 +17,11 @@ def filter(url):
     if any(word in url for word in bad_words):
         raise Exception('suspicious string found in URL')
 
+def check_connection(url):
+    r = requests.head(url)
+    return True
+
+
 def lambda_handler(event, context):
 
     # Decode the url argument and fix if no protocol
@@ -25,6 +31,7 @@ def lambda_handler(event, context):
 
     if 'http' not in url:
         url = 'http://' + url
+    check_connection(url)
 
     now = datetime.now()
     timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
