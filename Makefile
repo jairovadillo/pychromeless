@@ -2,13 +2,24 @@
 
 AWS_USER = "glimpse"
 S3_BUCKET = "glimpsefiles"
+
+# Outdated
 S3_KEY = "functions/screenshot/build.zip"
 FUNCTION_NAME = "GlimpseScan"
+# Outdated
+
+RUN_S3_KEY = "run/function/build.zip"
+RUN_FUNCTION_NAME = "glimpseRun"
+TEST_S3_KEY = "test/function/build.zip"
+TEST_FUNCTION_NAME = "glimpseTest"
 
 clean:
 	rm -rf build build.zip
 	rm -rf __pycache__
 
+#
+# Get browser binaries and drivers. Place in bin/
+#
 fetch-dependencies:
 	mkdir -p bin/
 
@@ -34,18 +45,29 @@ fetch-dependencies:
 	#tar -xjvf firefox.tar.bz2 -C bin/ 
 	#rm firefox.tar.bz2
 
+#
+# Build the docker container for local testing. Only
+# needed when updating the Lambda configuration in
+# docker-compose.yml or Dockerfile 
+#
 build:
 	docker-compose build
 
+#
+# Scan a URL but don't update if already scanned
+#
 run:
 	docker-compose run --rm lambda src.lambda_function.lambda_handler '{"url": "${URL}"}'
 
+#
+# Scan a URL and force an update
+#
 update:
 	docker-compose run --rm lambda src.lambda_function.lambda_handler '{"url": "${URL}", "update": "true"}'
 
-test: build
-	docker-compose run --rm lambda src.lambda_function.lambda_handler '{"url": "${URL}"}'
-
+#
+# Make a deployment package to be uploaded for Lambda
+#
 pack: clean fetch-dependencies
 	mkdir build
 	cp -r src build/.
@@ -56,6 +78,18 @@ pack: clean fetch-dependencies
 	cp build/build.zip .
 	rm -rf build
 
-deploy: pack
-	aws s3 cp ./build.zip s3://${S3_BUCKET}/${S3_KEY} --profile ${AWS_USER}
-	aws lambda update-function-code --function-name ${FUNCTION_NAME} --s3-bucket ${S3_BUCKET} --s3-key ${S3_KEY} --profile ${AWS_USER} 
+#
+# Update the test Lambda function with the current local code
+#
+deploy-test: pack
+	aws s3 cp ./build.zip s3://${S3_BUCKET}/${TEST_S3_KEY} --profile ${AWS_USER}
+	aws lambda update-function-code --function-name ${TEST_FUNCTION_NAME} --s3-bucket ${S3_BUCKET} --s3-key ${TEST_S3_KEY} --profile ${AWS_USER} 
+
+#
+# Copy the code from the test environment to
+# production and update the Lambda function
+#
+deploy-run:
+	aws s3 cp s3://${S3_BUCKET}/${TEST_S3_KEY} s3://${S3_BUCKET}/${RUN_S3_KEY} --profile ${AWS_USER}
+	aws lambda update-function-code --function-name ${RUN_FUNCTION_NAME} --s3-bucket ${S3_BUCKET} --s3-key ${RUN_S3_KEY} --profile ${AWS_USER}
+
