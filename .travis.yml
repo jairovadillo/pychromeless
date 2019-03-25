@@ -1,0 +1,7 @@
+services:
+  - docker
+
+script:
+  - make build
+  - make run URL=https://google.com
+  - make update URL=https://google.com
