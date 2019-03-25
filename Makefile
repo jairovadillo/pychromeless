@@ -50,7 +50,7 @@ fetch-dependencies:
 # needed when updating the Lambda configuration in
 # docker-compose.yml or Dockerfile 
 #
-build: clean fetch-dependencies:
+build: clean fetch-dependencies
 	docker-compose build
 
 #
