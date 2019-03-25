@@ -13,6 +13,9 @@ RUN_FUNCTION_NAME = "glimpseRun"
 TEST_S3_KEY = "test/function/build.zip"
 TEST_FUNCTION_NAME = "glimpseTest"
 
+set:
+	source ./access.secret
+
 clean:
 	rm -rf build build.zip
 	rm -rf __pycache__

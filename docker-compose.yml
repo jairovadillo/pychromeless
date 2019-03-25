@@ -6,5 +6,11 @@ services:
     environment:
       - PYTHONPATH=/var/task/src:/var/task/lib
       - PATH=/var/task/bin
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - GLIMPSE_BUCKET_NAME=glimpsefiles
+      - GLIMPSE_SCREENSHOT_DIR=test/screenshots/  
+      - GLIMPSE_DB_TABLE=glimpsetest
+      - CONTINUOUS_INTEGRATION=true
     volumes:
       - ./src/:/var/task/src/
