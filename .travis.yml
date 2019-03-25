@@ -13,4 +13,4 @@ before_script:
 script:
 - make run URL=https://google.com
 - make update URL=https://google.com
-- make run URL=file:///etc/passwd
+- make run URL=file:///etc/passwd || echo "Made to fail"
