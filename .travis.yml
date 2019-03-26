@@ -13,31 +13,18 @@ env:
 before_script:
 - make build
 
-jobs:
-  include:
-    - stage: "valid"
-      name: "Valid URLs"
-      script:
-        - make run URL=https://google.com
-        - make update URL=https://google.com
-        - make update URL=1.1.1.1
-        - make update URL=http://letmeoutofyour.net:8081/
-      if: env(DO_TESTS) = "true"
-    - stage: "scenarios"
-      name: "HTTP Scenarios"
-      script:
-        - make update URL=https://httpbin.org/redirect/6
-        - make update URL=https://httpbin.org/image/png
-        - make update URL=https://httpbin.org/headers
-      if: env(DO_TESTS) = "true"
-    - stage: "fails"
-      name: "Made to fail"
-      script:
-        - make run URL=file:///etc/passwd || echo "SAVED - Made to fail"
-        - make run URL=gibberish || echo "SAVED - Made to fail"
-        - make run URL=mjnjvfidrilyenbbvjwisyzdpycppftjombbxqrtvkcpsbxdnllqupptmhancjqimgcpsfuhzjpdkiaibkcigwyrmaajjszyxvyjekbobdzluepicwnelaaljhkqzmqdupjbhercywvvomwzfszzeptaeaiofiohixlzfwjnlgvilyklivymuknqybunftprnvotjviimcttlyjqfhdefapbpzvzugghzaisdyrmebjurqtzbbheomgmentccdekijireporxxmvqneebbrfzhvgbydzmiaewpqopnxzdsrt
-          || echo "Made to fail"
-      if: env(DO_TESTS) = "true"
+script:
+  - make run URL=https://google.com
+  - make update URL=https://google.com
+  - make update URL=1.1.1.1
+  - make update URL=http://letmeoutofyour.net:8081/
+  - make update URL=https://httpbin.org/redirect/6
+  - make update URL=https://httpbin.org/image/png
+  - make update URL=https://httpbin.org/headers
+  - make run URL=file:///etc/passwd || echo "SAVED - Made to fail"
+  - make run URL=gibberish || echo "SAVED - Made to fail"
+  - make run URL=mjnjvfidrilyenbbvjwisyzdpycppftjombbxqrtvkcpsbxdnllqupptmhancjqimgcpsfuhzjpdkiaibkcigwyrmaajjszyxvyjekbobdzluepicwnelaaljhkqzmqdupjbhercywvvomwzfszzeptaeaiofiohixlzfwjnlgvilyklivymuknqybunftprnvotjviimcttlyjqfhdefapbpzvzugghzaisdyrmebjurqtzbbheomgmentccdekijireporxxmvqneebbrfzhvgbydzmiaewpqopnxzdsrt
+    || echo "Made to fail"
 
 before_deploy:
 - make pack
@@ -50,9 +37,9 @@ deploy:
   secret_access_key:
     #secure: OdjTzGgDsSatEvPBuND4y9QNjusTXcJVuBApXq1p6Sa4tX/6zrqB4k1Su1z+WfvdPlWaJ81BoQjlWnhEbKvBibOEImM2Fw7nbKntYmSyLprG6s5UHfQ4pTxaF35FdpsWOxenLywmjPr/U9JZ5Qdwce53FAg3hqAeAdE/09jIwefoWHR9kP3UBJOV0WKaYvAmnBjypJufT985hRNN59DFQnVtJWikU77vp604ArX+7jGNBOg+9huhegIpqTApEJuNX2+bkwRROCx/fAYFjrff/qOPFTFJbBToPLGNLawgDlEzZ/iXwDjBxm01U/gii+ixPv/6zm6BwLOg/tzfPHEodEHde9zEgH9rd1dEC08CnqY2SJOpKBNjdKudvdZiVpNKJEye/ebOoUSh9oRCPUjfwIkQN1fzvMat51Fto81QXbq503m+jCgISoYAWaPLFUvA0ijWnfqHOzUlzIbDoDvznPtkW/1N+JfDE8VfzMJNGT7TMD38wTIhPQYU88hJe1tw0n0sf8GoFfPs5VmIu/x1Yk5aus3lu3IQW530CqKOuyHRODjfpyBrWtUTJx7Fjk8goRuaey9/gDXL4XYyNRjx2qz4UdFi+MKuezxD9EkU2Lqt3PKEAhW6zdk268rLLgSl/1PAvQomLogbERcYwzzVdVvsp0xVZcCBdIgOuu5ERCc=
     secure: prKdiPz2nDNb3zUpDI5xKDfb6JhFTkEkVQFw965zAoLz6j4A4+XBywjPQ10x5fuZ5lm0at680Kb7vXIaL1ofTBImg5DLs79byh6R0muRvflJ95F0QQVy6x3J80oMD9KeUOy6kTgLSwIyv3V9OADfeo4+SZWwo/x7mv4ss9hwrzxOuD+L0a6fPUUQQbIKsQ4T408wEMLUjr7sDCCaqN28VDnJACTrAL2Oj8IGHOYzXaYpin6vfdasI/ICA2ClHxXADCg3gWg02oQQiRwI51N2L33KBb9SBQDlk3/G4nkvP0m7ikAZsWy7QBpc7skEZzrb+VjblsuH+DWnCdaITbbQB0qPTb86c/rcFkY5wIMxwK7plEfUvLoncphuJBkIEbeQr5IhRt8UuFM4bx4IXOuBw7yko2RvZiXwUL9qlN//UAWueKJWeP44Vft4nvmUPlY3hKHZrO1J4ExUCzJ6HwISviCUo+zrozCh9ubL8iDxgRLz41mG1Dk2/QxWT4uclDUmGDucgId6shrAWGxlejYsSvzNOGicoC/pasl+tTl0ItX19oNNHHxDcAcjrmhKAyktOQNdlnBUB/Q1WMr4XiKKmLgB50zqV2nywaIOgMoHzOhY3g65htX18/ReFB+0SadL7bDXIv90RtYyLpimRb+ciez/FngHFCHfcyeKAS8JMWA=
-  bucket: $GLIMPSE_BUCKET_NAME
+  bucket: $BUCKET_NAME
   region: us-east-1
-  upload_dir: $GLIMPSE_FUNCTION_DIR
+  upload_dir: $TEST_FUNCTION_DIR
   local_dir: dist/function
   skip_cleanup: true
   on:
