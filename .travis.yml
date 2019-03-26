@@ -21,7 +21,7 @@ script:
 - make run URL=mjnjvfidrilyenbbvjwisyzdpycppftjombbxqrtvkcpsbxdnllqupptmhancjqimgcpsfuhzjpdkiaibkcigwyrmaajjszyxvyjekbobdzluepicwnelaaljhkqzmqdupjbhercywvvomwzfszzeptaeaiofiohixlzfwjnlgvilyklivymuknqybunftprnvotjviimcttlyjqfhdefapbpzvzugghzaisdyrmebjurqtzbbheomgmentccdekijireporxxmvqneebbrfzhvgbydzmiaewpqopnxzdsrt
   || echo "Made to fail"
 before_deploy:
-- make build
+- make pack
 deploy:
   provider: s3
   access_key_id:
