@@ -89,6 +89,9 @@ def lambda_handler(event, context):
 
         db_data['effectiveurl'] = glimpse.driver.current_url
         db_data['title'] = glimpse.driver.title
+        if db_data['title'] == '':
+            db_data['title'] = 'Not given'
+
         if exists:
             db_data['numscans'] += 1
         else:
