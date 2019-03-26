@@ -17,7 +17,7 @@ set:
 	source ./access.secret
 
 clean:
-	rm -rf build build.zip
+	rm -rf build dist
 	rm -rf __pycache__
 
 #
@@ -78,7 +78,8 @@ pack: clean fetch-dependencies
 	cp -r lib build/.
 	pip install -r requirements.txt -t build/lib/.
 	cd build; zip -9qr build.zip .
-	cp build/build.zip .
+	mkdir dist
+	cp build/build.zip dist/build.zip
 	rm -rf build
 
 #
