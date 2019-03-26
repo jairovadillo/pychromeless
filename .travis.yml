@@ -4,8 +4,8 @@ services:
 env:
   global:
   - BUCKET_NAME=glimpsefiles
-  - TEST_FUNCTION_DIR=test/function/
-  - RUN_FUNCTION_DIR=run/function/
+  - TEST_FUNCTION_DIR=test/function
+  - RUN_FUNCTION_DIR=run/function
   - DO_TESTS="false"
   - secure: OpAR7Te7TvxzeIMCtpDC7rTTYijrWlh9LtCB8EBYzZkcAmKUicb/Amiocl2x6EPlkFqZXcX0acuZvEbhfrZlRrhcmSTOujHkGQk/u6j2W96v5cQ2udW03XVv24Q3suP7qmANAe+T6wfKLj7FPtP/L+IkN3gVw1rzxQP2dJZMvbS9qXul8+VdwaFqsw5i6v2ys3jpFnYtkYGttXrR6LGXVQ9iv9SJkcKYXYBOs/H2upL1pRsJHbldsQqaWQ3f34Cl4jSv/+PM3YABmol94pZqaVOkItdJFtzYoL5VV9taF/uIIOykfVEwI0hMXOfm0H/BIGCgChYnNztqfM39tCeeH1QSUaF7rS8tNwa5AKJEQkDvoQyjcWHEHtQJk8VkmvRcw/YF8zOAymfbpN72L5jy+vhabreaIt14ZsABmerL2F40gyH07KMI6UYrMT6Nnz3aAqYs+2NcwEo6mKGyk9fcXA0UT4vpApexoxbLSD57b5VVvkoMMzpg9OJUu1VzI0Rqug2sgmX4dPQda3RBCL03O2TRdUL4WaGUnWOpLyhz08d7Xh5OkIo6I4uq9XtHi7Sd7D9gi6Vzp+PbQUvpwZqnXOL3hU0GvohwuQqvgKdSkQTcecdVbwtCl1qLriU6Z54nCbSOpWaIJ2Tc4wG7CMZDEaZR4cazokS6xXSCYxM3wfk=
   - secure: OdjTzGgDsSatEvPBuND4y9QNjusTXcJVuBApXq1p6Sa4tX/6zrqB4k1Su1z+WfvdPlWaJ81BoQjlWnhEbKvBibOEImM2Fw7nbKntYmSyLprG6s5UHfQ4pTxaF35FdpsWOxenLywmjPr/U9JZ5Qdwce53FAg3hqAeAdE/09jIwefoWHR9kP3UBJOV0WKaYvAmnBjypJufT985hRNN59DFQnVtJWikU77vp604ArX+7jGNBOg+9huhegIpqTApEJuNX2+bkwRROCx/fAYFjrff/qOPFTFJbBToPLGNLawgDlEzZ/iXwDjBxm01U/gii+ixPv/6zm6BwLOg/tzfPHEodEHde9zEgH9rd1dEC08CnqY2SJOpKBNjdKudvdZiVpNKJEye/ebOoUSh9oRCPUjfwIkQN1fzvMat51Fto81QXbq503m+jCgISoYAWaPLFUvA0ijWnfqHOzUlzIbDoDvznPtkW/1N+JfDE8VfzMJNGT7TMD38wTIhPQYU88hJe1tw0n0sf8GoFfPs5VmIu/x1Yk5aus3lu3IQW530CqKOuyHRODjfpyBrWtUTJx7Fjk8goRuaey9/gDXL4XYyNRjx2qz4UdFi+MKuezxD9EkU2Lqt3PKEAhW6zdk268rLLgSl/1PAvQomLogbERcYwzzVdVvsp0xVZcCBdIgOuu5ERCc=
@@ -40,7 +40,7 @@ deploy:
   bucket: $BUCKET_NAME
   region: us-east-1
   upload_dir: $TEST_FUNCTION_DIR
-  local_dir: dist/
+  local_dir: dist/function
   skip_cleanup: true
   on:
     branch: build
