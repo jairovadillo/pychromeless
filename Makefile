@@ -78,8 +78,8 @@ pack: clean fetch-dependencies
 	cp -r lib build/.
 	pip install -r requirements.txt -t build/lib/.
 	cd build; zip -9qr build.zip .
-	mkdir dist
-	cp build/build.zip dist/build.zip
+	mkdir -p dist/function
+	cp build/build.zip dist/function/build.zip
 	rm -rf build
 
 #
