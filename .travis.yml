@@ -40,7 +40,7 @@ deploy:
   bucket: $BUCKET_NAME
   region: us-east-1
   upload_dir: $TEST_FUNCTION_DIR
-  local_dir: dist/function
+  local_dir: dist/
   skip_cleanup: true
   on:
     branch: build
