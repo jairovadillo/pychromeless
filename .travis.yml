@@ -1,5 +1,5 @@
 services:
-- docker
+  - docker
 
 env:
   global:
@@ -11,7 +11,7 @@ env:
   - secure: OdjTzGgDsSatEvPBuND4y9QNjusTXcJVuBApXq1p6Sa4tX/6zrqB4k1Su1z+WfvdPlWaJ81BoQjlWnhEbKvBibOEImM2Fw7nbKntYmSyLprG6s5UHfQ4pTxaF35FdpsWOxenLywmjPr/U9JZ5Qdwce53FAg3hqAeAdE/09jIwefoWHR9kP3UBJOV0WKaYvAmnBjypJufT985hRNN59DFQnVtJWikU77vp604ArX+7jGNBOg+9huhegIpqTApEJuNX2+bkwRROCx/fAYFjrff/qOPFTFJbBToPLGNLawgDlEzZ/iXwDjBxm01U/gii+ixPv/6zm6BwLOg/tzfPHEodEHde9zEgH9rd1dEC08CnqY2SJOpKBNjdKudvdZiVpNKJEye/ebOoUSh9oRCPUjfwIkQN1fzvMat51Fto81QXbq503m+jCgISoYAWaPLFUvA0ijWnfqHOzUlzIbDoDvznPtkW/1N+JfDE8VfzMJNGT7TMD38wTIhPQYU88hJe1tw0n0sf8GoFfPs5VmIu/x1Yk5aus3lu3IQW530CqKOuyHRODjfpyBrWtUTJx7Fjk8goRuaey9/gDXL4XYyNRjx2qz4UdFi+MKuezxD9EkU2Lqt3PKEAhW6zdk268rLLgSl/1PAvQomLogbERcYwzzVdVvsp0xVZcCBdIgOuu5ERCc=
 
 before_script:
-- make build
+  - make build
 
 script:
   - make run URL=https://google.com
@@ -28,7 +28,7 @@ script:
     || echo "Made to fail"
 
 before_deploy:
-- make pack
+  - make pack
 
 deploy:
   provider: s3
@@ -49,4 +49,4 @@ deploy:
 notifications:
   slack:
     rooms:
-      secure: "b31clt8CBoU3DppPKzuPvyJAB8VznArab9UQtnEp11n1uKP1QEOxqq2kiPD/8iYBS7MbrtXn2+RVkwyoewojNOUe9Fq1nsTZfF8u/hl2LgW1eZNJNLBYoQYBHQakmH/Qp/1bxu9Nf95llzPtqQVl5F4YxGqdzQKwkGb2MECytweQF5NXzMcb4luBSVMZDI6VaEVMfkFXl2jHdGKiXst4VewYSnwtAEsCwyz0IFbx6G8+dvcN+paKnzjICOs4S1NM3UZnb35zENXID+4e2FOaYvJ1EGkkFx+JYaWZpA7RYe19tkaOICkkhnIoTn165pybLV+3LPU/e3RvLOxMMubN93t0Aaq41/vnrgrnzoz6J/r+jUOWiBMI8oicyTdri/j6Foomjbv9WVLbaG8LwqyFXTEHLlvwdaEZSZMhFfPDXyB3awZ48WEhZHntZTcG90ynPH/bu7oKhqhA5NFIqxottmnJZTxLlDTvQ38FHdCltxuYr7T7/IJBfSrl5dCjRMxyG+LFmXpenogFTSf39mSAK84JqDe2Toz8AjkZkod8swpkRuRjHZCzsceDVuUR3Q4ccKwHXwLFaobq1Km8VnWbe6IWUaCGatXAafM/qDkIGSs9Y49oLZkXb3cdVaw/cg+Ah9a4oE62erD4SfWMRttg0tykLwmXDSg2rayMtGtLP/U="
+      secure: "45VhQ6CEmS/SyriKTuzlHkT3hjFkzUW+MPEHjwxGd19mkHxN3LO86T9ZGkNSSuRahc4W5esHW4SAfB9P0X/3NDCvoMj/PiGCVZ1Q/BSatnWMm4ScG88OAiW6JfqPV4Hh7S3rpXwXYlcFNDOkAt6RSFJmVxz6U43t/xm2INHFfWJxFyt/aObXWXsO3iacJVX0sCsAdxh0/DuxbIGvQoM0wyBO+PxSOJfIK5/z1Bowuax4hVbt6LIlJIHQBywGYN8vmhmfL8bzsy1xDBofthmaRbXVHaeGaXKBRsJo/6u5JOMrINyIpFO2boz7R6Id4wtFYuQRYa5FXRKRTex7Z6wH6S1RGtbWO0fVIqdxdTHrv8l3jQlI3GLZYYe6pHJfnIVLYAc7nHROKaiE5D2uW270SqDCp84ht2rcNYwEgdHXAgEU/kVebjTMti5GmBbXXXLBCix8Ew/Lkfo4hRm30a0mnMLuSrQZ3v8BBIAa0KNz/0v+PFCgzZBfsXtv2jcV2BOEH4JzfKZ9sxa3xLIhYi0hm0Eh1bsbVLkWv0ykbGED7bjxM5sWbFVwtBLL6xSRLfOK9uvhh/AW6lRZGKv2XCDg3GHmivkYhkFblaQWS/Ltd0G8/JlA7RV+DqN7VMqGKRf6A9W28Wyy7eC/095o+y8v+MTTzC4bhy2uoXlYIPpU/54="
