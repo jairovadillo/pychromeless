@@ -16,7 +16,7 @@ def md5_str(string):
 
 # Fail if URL matches any bad words
 def filter(url):
-    bad_words = ['file://']
+    bad_words = ['file://', 'ftp://']
     if any(word in url for word in bad_words):
         raise Exception('suspicious string found in URL')
 
@@ -34,7 +34,7 @@ def lambda_handler(event, context):
     # Filter for potentially malicious or invalid URLs
     filter(url)
 
-    protocols = ['http', 'https', 'ftp']
+    protocols = ['http', 'https']
     if not any(proto + '://' in url for proto in protocols):
         url = 'http://' + url
     check_connection(url)
