@@ -18,6 +18,7 @@ script:
   - make update URL=https://google.com
   - make update URL=1.1.1.1
   - make update URL=http://letmeoutofyour.net:8081/
+  - make update URL=http://httpbin.org/anything/$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
   - make update URL=https://httpbin.org/redirect/6
   - make update URL=https://httpbin.org/image/png
   - make update URL=https://httpbin.org/headers
