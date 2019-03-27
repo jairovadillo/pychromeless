@@ -34,7 +34,8 @@ def lambda_handler(event, context):
     # Filter for potentially malicious or invalid URLs
     filter(url)
 
-    if 'http' not in url:
+    protocols = ['http', 'https', 'ftp']
+    if not any(proto + '://' in url for proto in protocols):
         url = 'http://' + url
     check_connection(url)
 
@@ -90,7 +91,7 @@ def lambda_handler(event, context):
         db_data['effectiveurl'] = glimpse.driver.current_url
         db_data['title'] = glimpse.driver.title
         if db_data['title'] == '':
-            db_data['title'] = 'Not given'
+            db_data['title'] = 'No title given'
 
         if exists:
             db_data['numscans'] += 1
