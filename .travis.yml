@@ -48,6 +48,6 @@ deploy:
 notifications:
   slack:
     template:
-        - "Build <%{build_url}|#%{build_number}> (<%{compare_url}|%{commit}>) of *%{repository_slug}*@%{branch} %{result} in %{duration}"
+        - "Build <%{build_url}|#%{build_number}> (<%{compare_url}|%{commit}>) of *%{repository_slug}* @ %{branch} %{result} in %{duration}"
     rooms:
       secure: t5ThZ20j8M5RwvJQQYyN+0MYjqefgrv7OtdUYDpzpxCCB2o9lGTYmIuQrLRZY7BIA1SZS3nIiZvwudR41ibcjfF/Np5W0FntezLRmfpPCic4V8aG4F0iTINNJPK6+6KDHmKEylSjtB30lhp2Xa/4uXvrcHRbFct/+QDAD6WtjkKQvm1OFRFq7GVkWCHp5AyQRzaJaKGJ9OjWJAHaYxN+QTuubLW0PVjbeb/3b7qt3v/iqCngmynaan5xghy2P9RiMo9ll5aTSiSrtQC1s1o2uR4ISheZ5BJPT6yypemlxPUWMBe1t48JZXp2HQCm4yncgqlavwmeWffw/cN7vYYjuQeNhgWUYVI03PbbNvF/yX1a++PFtnL4Q1/6ZKo/xcQG74fVCmnVzdBQ9s3I4JybgRTyQyXpQbmRQRmZkQKojCtenycc8ShtkRyRN/H05yq1gmRd55qBxZb2rzaFmd+uKnM1NbQmPzhR7Dn1YRLPpFBFlOVYl7xlDi8ITpdxUJvjjjbgIkTn0UamYjdG1MjXWOFgi+qQfPnQ5vYWGNOxiGOQ7uGlD8pvatyzFJkPhMBSU3QNm5OB7hTlPJDwZCMmtvV+uO4itXU6dfPO1SZdtgshUi1hUNtuu7r1JsAtq7zGXaYjLhk7feNJ6z3oq6V8DVd7HQK+TkEUN6OghAFae20=
