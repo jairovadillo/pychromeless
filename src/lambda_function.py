@@ -59,7 +59,7 @@ def lambda_handler(event, context):
     db_data = db.get({'urlhash': url_hash})
     
     if db_data is None:
-        db_data = {'urlhash': url_hash, 'url': url, 'timescanned': timestamp, 'numscans': 1}
+        db_data = {'urlhash': url_hash, 'url': url, 'timescanned': timestamp, 'numscans': 0}
     else:
         exists = True
         db_data['timescanned'] = timestamp
@@ -68,14 +68,6 @@ def lambda_handler(event, context):
     s3_key = s3.get_key(remote_path)
 
     # Don't update if update==false or the parameter doesn't exist
-    #if 'update' in event.keys():
-    #    if str(event['update']).lower() != 'true':
-    #        if exists:
-    #            return return_data
-    #else:
-    #    if exists:
-    #        return return_data
-
     if 'update' not in event.keys() or str(event['update']).lower() != 'true':
         # Don't force an update
         if exists:
@@ -93,10 +85,14 @@ def lambda_handler(event, context):
         if db_data['title'] == '':
             db_data['title'] = 'No title given'
 
-        if exists:
-            db_data['numscans'] += 1
-        else:
-            db_data['numscans'] = 1
+        # Don't need if db_data['numscans'] is set to 0 when
+        # the DB GET doesn't exist 
+        #if exists:
+        #    db_data['numscans'] += 1
+        #else:
+        #    db_data['numscans'] = 1
+        db_data['numscans'] += 1
+
         db.put(db_data)
 
         return return_data
