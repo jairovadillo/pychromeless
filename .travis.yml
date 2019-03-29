@@ -66,9 +66,13 @@ deploy:
 
 after_deploy:
   - if [ $TRAVIS_BRANCH == "build" ]; then
-      aws lambda update-function-code --function-name $TEST_FUNCTION_NAME --s3-bucket $BUCKET_NAME --s3-key $TEST_FUNCTION_DIR/build.zip
+      aws lambda update-function-code --function-name $TEST_FUNCTION_NAME --s3-bucket $BUCKET_NAME --s3-key $TEST_FUNCTION_DIR/build.zip;
+    else echo "Skipping Lambda update for $TEST_FUNCTION_NAME.";
+    fi
   - if [ $TRAVIS_BRANCH == "master" ]; then
-      aws lambda update-function-code --function-name $RUN_FUNCTION_NAME --s3-bucket $BUCKET_NAME --s3-key $RUN_FUNCTION_DIR/build.zip
+      aws lambda update-function-code --function-name $RUN_FUNCTION_NAME --s3-bucket $BUCKET_NAME --s3-key $RUN_FUNCTION_DIR/build.zip;
+    else echo "Skipping Lambda update for $RUN_FUNCTION_NAME.";
+    fi
 
 notifications:
   slack:
