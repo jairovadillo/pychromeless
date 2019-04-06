@@ -2,6 +2,7 @@ import os
 import hashlib
 import urllib
 import requests
+import pprint
 from datetime import datetime
 import glimpse_driver as gd
 from s3_help import S3
@@ -39,9 +40,17 @@ def lambda_handler(event, context):
         url = 'http://' + url
     check_connection(url)
 
+    STAR_LEN = 40
     BUCKET_NAME = os.environ.get('GLIMPSE_BUCKET_NAME')
     SCREENSHOT_DIR = os.environ.get('GLIMPSE_SCREENSHOT_DIR')
     DB_TABLE = os.environ.get('GLIMPSE_DB_TABLE')
+    pp = pprint.PrettyPrinter(indent=4)
+
+    print('*'*STAR_LEN)
+    print(f'Using S3 bucket "{BUCKET_NAME}"')
+    print(f'    with path "{SCREENSHOT_DIR}""')
+    print(f'Using DynamoDB table "{DB_TABLE}""')
+    print('*'*STAR_LEN)
 
     now = datetime.now()
     timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -71,6 +80,9 @@ def lambda_handler(event, context):
     if 'update' not in event.keys() or str(event['update']).lower() != 'true':
         # Don't force an update
         if exists:
+            print('*'*STAR_LEN)
+            pp.pprint(return_data)
+            print('*'*STAR_LEN)
             return return_data
 
 
@@ -92,6 +104,10 @@ def lambda_handler(event, context):
         #else:
         #    db_data['numscans'] = 1
         db_data['numscans'] += 1
+
+        print('*'*STAR_LEN)
+        pp.pprint(db_data)
+        print('*'*STAR_LEN)
 
         db.put(db_data)
 
