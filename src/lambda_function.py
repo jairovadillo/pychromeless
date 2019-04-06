@@ -46,11 +46,10 @@ def lambda_handler(event, context):
     DB_TABLE = os.environ.get('GLIMPSE_DB_TABLE')
     pp = pprint.PrettyPrinter(indent=4)
 
-    print('*'*STAR_LEN)
+    print('[!] Getting Environment Variables')
     print(f'Using S3 bucket "{BUCKET_NAME}"')
     print(f'    with path "{SCREENSHOT_DIR}""')
     print(f'Using DynamoDB table "{DB_TABLE}""')
-    print('*'*STAR_LEN)
 
     now = datetime.now()
     timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -73,16 +72,12 @@ def lambda_handler(event, context):
         exists = True
         db_data['timescanned'] = timestamp
 
-    s3 = S3(BUCKET_NAME)
-    s3_key = s3.get_key(remote_path)
-
     # Don't update if update==false or the parameter doesn't exist
     if 'update' not in event.keys() or str(event['update']).lower() != 'true':
         # Don't force an update
         if exists:
-            print('*'*STAR_LEN)
+            print('[!] Existing Data')
             pp.pprint(return_data)
-            print('*'*STAR_LEN)
             return return_data
 
 
@@ -90,7 +85,10 @@ def lambda_handler(event, context):
     try:
         glimpse.driver.get(url)
         glimpse.screenshot(local_path)
-        s3.upload_file(s3_key, local_path)
+        
+        s3 = S3(BUCKET_NAME)
+        #s3_key = s3.get_key(remote_path)
+        s3.upload_file(local_path, remote_path)
 
         db_data['effectiveurl'] = glimpse.driver.current_url
         db_data['title'] = glimpse.driver.title
@@ -105,9 +103,8 @@ def lambda_handler(event, context):
         #    db_data['numscans'] = 1
         db_data['numscans'] += 1
 
-        print('*'*STAR_LEN)
+        print('[!] Adding New Data')
         pp.pprint(db_data)
-        print('*'*STAR_LEN)
 
         db.put(db_data)
 

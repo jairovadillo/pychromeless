@@ -9,15 +9,5 @@ class S3:
     def get_key(self, remote_path):
         return self.resource.Object(bucket_name=self.bucket_name, key=remote_path)
 
-    def upload_file(self, key, local_path):
-        key.upload_file(local_path)
-
-    def check_exists(self, folder, filename):
-        try:
-            self.resource.Object(self.bucket_name, folder + filename).load()
-            return {'screenshot': 'https://{}.s3.amazonaws.com/{}'.format(self.bucket_name, folder) + filename }
-        except botocore.exceptions.ClientError as e:
-            if e.response['Error']['Code'] == "404" or e.response['Error']['Code'] == "403":
-                return False
-            else:
-                raise
+    def upload_file(self, local_path, remote_path):
+        self.resource.meta.client.upload_file(local_path,self.bucket_name, remote_path)
