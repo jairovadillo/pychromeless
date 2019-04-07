@@ -40,7 +40,6 @@ def lambda_handler(event, context):
         url = 'http://' + url
     check_connection(url)
 
-    STAR_LEN = 40
     BUCKET_NAME = os.environ.get('GLIMPSE_BUCKET_NAME')
     SCREENSHOT_DIR = os.environ.get('GLIMPSE_SCREENSHOT_DIR')
     DB_TABLE = os.environ.get('GLIMPSE_DB_TABLE')
@@ -48,8 +47,8 @@ def lambda_handler(event, context):
 
     print('[!] Getting Environment Variables')
     print(f'Using S3 bucket "{BUCKET_NAME}"')
-    print(f'    with path "{SCREENSHOT_DIR}""')
-    print(f'Using DynamoDB table "{DB_TABLE}""')
+    print(f'    with path "{SCREENSHOT_DIR}"')
+    print(f'Using DynamoDB table "{DB_TABLE}"')
 
     now = datetime.now()
     timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -74,7 +73,6 @@ def lambda_handler(event, context):
 
     # Don't update if update==false or the parameter doesn't exist
     if 'update' not in event.keys() or str(event['update']).lower() != 'true':
-        # Don't force an update
         if exists:
             print('[!] Existing Data')
             pp.pprint(return_data)
@@ -83,11 +81,11 @@ def lambda_handler(event, context):
 
     glimpse = gd.GlimpseDriver()
     try:
+        print('[!] Rendering Page')
         glimpse.driver.get(url)
         glimpse.screenshot(local_path)
         
         s3 = S3(BUCKET_NAME)
-        #s3_key = s3.get_key(remote_path)
         s3.upload_file(local_path, remote_path)
 
         db_data['effectiveurl'] = glimpse.driver.current_url
