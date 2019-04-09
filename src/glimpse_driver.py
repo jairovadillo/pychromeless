@@ -32,7 +32,7 @@ class Firefox(BrowserSettings):
 
 
 class Chromium(BrowserSettings):
-    def __init__(self):
+    def __init__(self, ua):
         BrowserSettings.__init__(self)
 
         self._tmp_folder = '/tmp/{}'.format(uuid.uuid4())
@@ -67,14 +67,14 @@ class Chromium(BrowserSettings):
         self.options.add_argument('--homedir={}'.format(self._tmp_folder))
         self.options.add_argument('--disk-cache-dir={}'.format(self._tmp_folder + '/cache-dir'))
         self.options.add_argument(
-            'user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36')
+            f'user-agent={ua}')
         self.options.binary_location = os.getcwd() + "/bin/headless-chromium"
 
         self.driver = webdriver.Chrome(chrome_options=self.options)
 
 
 class GlimpseDriver:
-    def __init__(self, browser=Chromium()):
+    def __init__(self, browser=Chromium(ua="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36")):
         self.driver = browser.driver
 
     def screenshot(self, path):

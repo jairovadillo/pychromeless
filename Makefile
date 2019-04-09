@@ -68,6 +68,9 @@ run:
 update:
 	docker-compose run --rm lambda src.lambda_function.lambda_handler '{"url": "${URL}", "update": "true"}'
 
+ua:
+	docker-compose run --rm lambda src.lambda_function.lambda_handler '{"url": "https://scriptingis.life/", "update": "true", "user-agent": "${UA}"}'
+
 #
 # Make a deployment package to be uploaded for Lambda
 #

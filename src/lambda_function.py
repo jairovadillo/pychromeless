@@ -78,10 +78,14 @@ def lambda_handler(event, context):
             pp.pprint(return_data)
             return return_data
 
-
-    glimpse = gd.GlimpseDriver()
+    glimpse = None
+    if 'user-agent' in event.keys():
+        glimpse = gd.GlimpseDriver(gd.Chromium(ua=event['user-agent']))
+    else:
+        glimpse = gd.GlimpseDriver()
     try:
         print('[!] Rendering Page')
+
         glimpse.driver.get(url)
         glimpse.screenshot(local_path)
         
