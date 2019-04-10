@@ -69,7 +69,7 @@ update:
 	docker-compose run --rm lambda src.lambda_function.lambda_handler '{"url": "${URL}", "update": "true"}'
 
 ua:
-	docker-compose run --rm lambda src.lambda_function.lambda_handler '{"url": "https://scriptingis.life/", "update": "true", "user-agent": "${UA}"}'
+	docker-compose run --rm lambda src.lambda_function.lambda_handler '{"url": "https://whatismybrowser.com/", "update": "true", "user-agent": "${UA}"}'
 
 #
 # Make a deployment package to be uploaded for Lambda
@@ -90,7 +90,7 @@ pack: clean fetch-dependencies
 #
 deploy-test: pack
 	aws s3 cp ./build.zip s3://${S3_BUCKET}/${TEST_S3_KEY} --profile ${AWS_USER}
-	aws lambda update-function-code --function-name ${TEST_FUNCTION_NAME} --s3-bucket ${S3_BUCKET} --s3-key ${TEST_S3_KEY} --profile ${AWS_USER} 
+	#aws lambda update-function-code --function-name ${TEST_FUNCTION_NAME} --s3-bucket ${S3_BUCKET} --s3-key ${TEST_S3_KEY} --profile ${AWS_USER} 
 
 #
 # Copy the code from the test environment to

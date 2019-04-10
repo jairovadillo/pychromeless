@@ -67,7 +67,7 @@ class Chromium(BrowserSettings):
         self.options.add_argument('--homedir={}'.format(self._tmp_folder))
         self.options.add_argument('--disk-cache-dir={}'.format(self._tmp_folder + '/cache-dir'))
         self.options.add_argument(
-            f'user-agent={ua}')
+            f'user-agent="{ua}"')
         self.options.binary_location = os.getcwd() + "/bin/headless-chromium"
 
         self.driver = webdriver.Chrome(chrome_options=self.options)
