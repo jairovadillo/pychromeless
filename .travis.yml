@@ -37,7 +37,7 @@ script:
   - make ua UA="python-requests/1.2.0"
   - make ua UA="Googlebot/2.1 (+http://www.googlebot.com/bot.html)"
   - make ua UA="Screw you webmaster!!!!"
-  - make ua UA="Im gonna mess\n\ryou up"
+  #- make ua UA="Im gonna mess\n\ryou up"
   - make ua UA=""
   - make run URL="" || echo "SAVED - Made to fail"
   - make run URL=file:///etc/passwd || echo "SAVED - Made to fail"
