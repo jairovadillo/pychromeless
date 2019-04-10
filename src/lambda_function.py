@@ -90,6 +90,12 @@ def lambda_handler(event, context):
         print('[!] Rendering Page')
 
         glimpse.driver.get(url)
+
+        if not glimpse.verify_user_agent():
+            print('[!] User-Agents do not match')
+            raise Exception('User-Agents do not match')
+        else:
+            print('[!] User-Agents match')
         glimpse.screenshot(local_path)
         
         s3 = S3(BUCKET_NAME)

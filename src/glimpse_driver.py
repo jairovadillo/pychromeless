@@ -6,13 +6,14 @@ from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 class BrowserSettings:
-    def __init__(self):
+    def __init__(self, user_agent):
         self.resolution = "1280x1696"
         #self.resolution = "1920x1080"
+        self.user_agent = user_agent
 
 class Firefox(BrowserSettings):
-    def __init__(self):
-        BrowserSettings.__init__(self)
+    def __init__(self, ua):
+        BrowserSettings.__init__(self, ua)
 
         os.system("/var/task/bin/firefox/firefox --headless")
 
@@ -33,7 +34,7 @@ class Firefox(BrowserSettings):
 
 class Chromium(BrowserSettings):
     def __init__(self, ua):
-        BrowserSettings.__init__(self)
+        BrowserSettings.__init__(self, ua)
 
         self._tmp_folder = '/tmp/{}'.format(uuid.uuid4())
 
@@ -67,7 +68,7 @@ class Chromium(BrowserSettings):
         self.options.add_argument('--homedir={}'.format(self._tmp_folder))
         self.options.add_argument('--disk-cache-dir={}'.format(self._tmp_folder + '/cache-dir'))
         self.options.add_argument(
-            f'user-agent="{ua}"')
+            f'user-agent={ua}')
         self.options.binary_location = os.getcwd() + "/bin/headless-chromium"
 
         self.driver = webdriver.Chrome(chrome_options=self.options)
@@ -75,6 +76,7 @@ class Chromium(BrowserSettings):
 
 class GlimpseDriver:
     def __init__(self, browser=Chromium(ua="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36")):
+        self.browser = browser
         self.driver = browser.driver
 
     def screenshot(self, path):
@@ -89,3 +91,8 @@ class GlimpseDriver:
     def get_network_history(self):
         net_list = self.driver.execute_script('return window.performance.getEntries()')
         return [site['name'] for site in net_list ]
+
+    def verify_user_agent(self):
+        nav_ua = self.driver.execute_script('return navigator.userAgent')
+        print(nav_ua)
+        return nav_ua == self.browser.user_agent
