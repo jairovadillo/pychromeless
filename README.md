@@ -1,4 +1,4 @@
-# Glimpse
+# Glimpse ![Build Status](https://api.travis-ci.com/becksteadn/glimpse.svg?branch=master)
 
 Python script to gather information about a website. Runs in AWS Lambda.
 
