@@ -8,7 +8,7 @@ def lambda_handler(*args, **kwargs):
 
     driver.get_url('https://www.google.es/')
 
-    driver.set_input_value('//input[@id="lst-ib"]', '21 buttons')
+    driver.set_input_value('//input[@name="q"]', '21 buttons')
 
     driver.click('//center//img[@alt="Google"]')
     time.sleep(0.5)

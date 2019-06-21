@@ -38,8 +38,8 @@ Everything is summarized into a simple Makefile so use:
     * `PYTHONPATH=/var/task/src:/var/task/lib`
     * `PATH=/var/task/bin`
 * Adjust lambda function parameters to match your necessities, for the given example:
-    * Timeout: +10 seconds
-    * Memory: + 250MB 
+    * Timeout: 30+ seconds
+    * Memory: 250+ MB 
 
 ## Shouts to
 * [Docker lambda](https://github.com/lambci/docker-lambda)
