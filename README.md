@@ -28,6 +28,34 @@ Have a look at the example in `lambda_function.py`: it looks up “21 buttons”
 
 Run it with: `make docker-run`
 
+#### Downloading files
+
+If your goal is to use selenium to download files instead of just scraping content from web pages, then
+you will need to specify a `download_dir` when initializing the WebDriverWrapper. Your download location 
+should be a writable Lambda directory such as `/tmp`. For example, the first code in 
+`lambda_handler` would become 
+
+```python
+driver = WebDriverWrapper(download_location='/tmp')
+```
+
+This will cause file downloads to automatically download into the `download_location` without 
+requiring a confirmation dialog. You might need to sleep the handler until the file is downloaded
+since this occurs asynchronously.
+
+In order to download a file from a link that opens in a new tab (i.e. `target='_blank'`) you will need to 
+call `enable_download_in_headless_chrome` in your scraping script after navigating to the desired page, but before
+clicking to download. This will replace all `target='_blank'` with `target='_self'`. For example:
+
+```python
+# Navigate to download page
+driver._driver.find_element_by_xpath('//a[@href="/downloads/"]').click()
+# Enable headless chrome file download
+driver.enable_download_in_headless_chrome()
+# Click the download link
+driver._driver.find_element_by_class_name("btn").click()
+```
+
 ## Building and uploading the distributable package
 
 Everything is summarized into a simple Makefile so use:
