@@ -1,6 +1,6 @@
 # PyChromeless
 
-Python (selenium) Lambda Chromium Automation (naming pending)
+Python (selenium) Lambda Chromium Automation
 
 PyChromeless allows to automate actions to any webpage from AWS Lambda. The aim of this project is to provide
  the scaffolding for future robot implementations.
