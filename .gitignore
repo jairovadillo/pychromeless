@@ -9,6 +9,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 env/
+venv/
 
 ### Project specifics
 bin/
